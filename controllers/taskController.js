@@ -23,6 +23,15 @@ const taskController = {
             message: 'task has been deleted',
             deletedTask: taskToDelete
         })
+    }),
+    listTasks: asyncHandler(async(req,res) => {
+        const tasksByUser = await Task.find({
+            user:req.user
+        })
+
+        res.json({
+            tasksByUser
+        })
     })
 }
 
