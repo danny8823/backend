@@ -30,7 +30,39 @@ const userController = {
             username: userCreated.username,
             email: userCreated.email,
         })
-    })
+    }),
+    login: asyncHandler(async(req,res) => {
+        const {email,password} = req.body
+
+        const user = await User.findOne({email})
+        if(!user) {
+            throw new Error('Invalid credentials')
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password)
+        if(!isMatch) {
+            throw new Error('Invalid credentials')
+        }
+
+        const token = jwt.sign(
+            {
+                id: user._id
+            },
+            "dannyboy",
+            {
+                expiresIn:'30d'
+            }
+        )
+
+        res.json({
+            message: 'login successful',
+            token: token,
+            id: user._id,
+            email: user.email,
+            username: user.username
+        })
+    }),
+    
 }
 
 module.exports = userController;
