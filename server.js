@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const userRouter = require('./routes/userRouter');
+const todoRouter = require('./routes/taskRouter');
 require('dotenv').config();
 const PORT = process.env.PORT || 1000;
 const server = express();
@@ -17,7 +18,10 @@ mongoose
     })
 
 server.use(express.json())
-server.use(userRouter)
+
+server.use('/',userRouter)
+server.user('/',todoRouter)
+
 server.listen(PORT,() => {
     console.log(`Server listening on port: ${PORT}`)
 })
